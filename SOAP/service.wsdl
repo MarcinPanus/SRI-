@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://www.examples.com/wsdl/HelloService.wsdl"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  name="MoviesService"
+                  targetNamespace="http://www.examples.com/wsdl/HelloService.wsdl">
+
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.examples.com/wsdl/HelloService.wsdl">
+      <xsd:complexType name="Movie">
+        <xsd:sequence>
+          <xsd:element name="id" type="xsd:string" />
+          <xsd:element name="title" type="xsd:string" />
+          <xsd:element name="director" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="MovieArray">
+        <xsd:sequence>
+          <xsd:element name="movie" type="tns:Movie" maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+
+
+  <wsdl:message name="AddMovieOutput">
+    <wsdl:part name="result" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="AddMovieInput">
+    <wsdl:part name="parameters" type="tns:Movie" />
+  </wsdl:message>
+
+  <wsdl:message name="GetMovieOutput">
+    <wsdl:part name="result" type="tns:Movie" />
+  </wsdl:message>
+
+  <wsdl:message name="DeleteMovieOutput">
+   <wsdl:part name="parameters" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="DeleteMovieInput">
+   <wsdl:part name="parameters" type="tns:Movie" />
+  </wsdl:message>
+
+  <wsdl:message name="UpdateMovieInput">
+   <wsdl:part name="parameters" type="tns:Movie" />
+  </wsdl:message>
+
+  <wsdl:message name="UpdateMovieOutput">
+    <wsdl:part name="result" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="ListMoviesOutput">
+   <wsdl:part name="result" type="tns:MovieArray" />
+  </wsdl:message>
+
+  <wsdl:portType name="MoviesServicePortType">
+    <wsdl:operation name="AddMovie">
+      <wsdl:input message="tns:AddMovieInput" />
+      <wsdl:output message="tns:AddMovieOutput" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMovie">
+      <wsdl:output message="tns:GetMovieOutput" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMovie">
+      <wsdl:input message="tns:DeleteMovieInput" />
+      <wsdl:output message="tns:DeleteMovieOutput" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMovie">
+      <wsdl:input message="tns:UpdateMovieInput" />
+      <wsdl:output message="tns:UpdateMovieOutput" />
+    </wsdl:operation>
+    <wsdl:operation name="ListMovies">
+      <wsdl:output message="tns:ListMoviesOutput" />
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="MoviesServiceSoapBinding" type="tns:MoviesServicePortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AddMovie">
+      <soap:operation soapAction="urn:AddMovie" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:examples:moviesService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input> 
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:examples:moviesService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="MoviesService">
+    <wsdl:port name="MoviesServiceSoapPort" binding="tns:MoviesServiceSoapBinding">
+      <soap:address location="http://localhost:3030/wsdl" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
